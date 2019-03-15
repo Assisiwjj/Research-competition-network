@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jingsai.demo.team.dao.TeamMapper">
+  <resultMap id="BaseResultMap" type="jingsai.demo.team.domain.Team">
+    <id column="pk_id" jdbcType="BIGINT" property="pkId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="teacher" jdbcType="VARCHAR" property="teacher" />
+    <result column="t_telephone" jdbcType="VARCHAR" property="tTelephone" />
+    <result column="member" jdbcType="VARCHAR" property="member" />
+    <result column="manager" jdbcType="VARCHAR" property="manager" />
+    <result column="m_telephone" jdbcType="VARCHAR" property="mTelephone" />
+    <result column="profile" jdbcType="VARCHAR" property="profile" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+    <result column="is_delete" jdbcType="BIT" property="isDelete" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <resultMap id="teamResultMap" type="jingsai.demo.team.domain.Team">
+    <id column="pk_id" jdbcType="BIGINT" property="pkId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="teacher" jdbcType="VARCHAR" property="teacher" />
+    <result column="t_telephone" jdbcType="VARCHAR" property="tTelephone" />
+    <result column="member" jdbcType="VARCHAR" property="member" />
+    <result column="manager" jdbcType="VARCHAR" property="manager" />
+    <result column="m_telephone" jdbcType="VARCHAR" property="mTelephone" />
+    <result column="profile" jdbcType="VARCHAR" property="profile" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+    <result column="is_delete" jdbcType="BIT" property="isDelete" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <association property="teamIntroduction" javaType="jingsai.demo.team.domain.TeamIntroduction">
+      <id column="pk_id" jdbcType="BIGINT" property="pkId" />
+      <result column="context" jdbcType="LONGVARCHAR" property="context" />
+      <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+      <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    </association>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    pk_id, name, teacher, t_telephone, member, manager, m_telephone, profile, picture, 
+    is_delete, gmt_create, gmt_modified
+  </sql>
+  <select id="selectByExample" parameterType="jingsai.demo.team.domain.TeamExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from team
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from team
+    where pk_id = #{pkId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from team
+    where pk_id = #{pkId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="jingsai.demo.team.domain.TeamExample">
+    delete from team
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="jingsai.demo.team.domain.Team">
+    insert into team (pk_id, name, teacher, 
+      t_telephone, member, manager, 
+      m_telephone, profile, picture, 
+      is_delete, gmt_create, gmt_modified
+      )
+    values (#{pkId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{teacher,jdbcType=VARCHAR}, 
+      #{tTelephone,jdbcType=VARCHAR}, #{member,jdbcType=VARCHAR}, #{manager,jdbcType=VARCHAR}, 
+      #{mTelephone,jdbcType=VARCHAR}, #{profile,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="jingsai.demo.team.domain.Team">
+    insert into team
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pkId != null">
+        pk_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="teacher != null">
+        teacher,
+      </if>
+      <if test="tTelephone != null">
+        t_telephone,
+      </if>
+      <if test="member != null">
+        member,
+      </if>
+      <if test="manager != null">
+        manager,
+      </if>
+      <if test="mTelephone != null">
+        m_telephone,
+      </if>
+      <if test="profile != null">
+        profile,
+      </if>
+      <if test="picture != null">
+        picture,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pkId != null">
+        #{pkId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="teacher != null">
+        #{teacher,jdbcType=VARCHAR},
+      </if>
+      <if test="tTelephone != null">
+        #{tTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="member != null">
+        #{member,jdbcType=VARCHAR},
+      </if>
+      <if test="manager != null">
+        #{manager,jdbcType=VARCHAR},
+      </if>
+      <if test="mTelephone != null">
+        #{mTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="profile != null">
+        #{profile,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null">
+        #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="jingsai.demo.team.domain.TeamExample" resultType="java.lang.Long">
+    select count(*) from team
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update team
+    <set>
+      <if test="record.pkId != null">
+        pk_id = #{record.pkId,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.teacher != null">
+        teacher = #{record.teacher,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tTelephone != null">
+        t_telephone = #{record.tTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.member != null">
+        member = #{record.member,jdbcType=VARCHAR},
+      </if>
+      <if test="record.manager != null">
+        manager = #{record.manager,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mTelephone != null">
+        m_telephone = #{record.mTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.profile != null">
+        profile = #{record.profile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.picture != null">
+        picture = #{record.picture,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDelete != null">
+        is_delete = #{record.isDelete,jdbcType=BIT},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModified != null">
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update team
+    set pk_id = #{record.pkId,jdbcType=BIGINT},
+      name = #{record.name,jdbcType=VARCHAR},
+      teacher = #{record.teacher,jdbcType=VARCHAR},
+      t_telephone = #{record.tTelephone,jdbcType=VARCHAR},
+      member = #{record.member,jdbcType=VARCHAR},
+      manager = #{record.manager,jdbcType=VARCHAR},
+      m_telephone = #{record.mTelephone,jdbcType=VARCHAR},
+      profile = #{record.profile,jdbcType=VARCHAR},
+      picture = #{record.picture,jdbcType=VARCHAR},
+      is_delete = #{record.isDelete,jdbcType=BIT},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="jingsai.demo.team.domain.Team">
+    update team
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="teacher != null">
+        teacher = #{teacher,jdbcType=VARCHAR},
+      </if>
+      <if test="tTelephone != null">
+        t_telephone = #{tTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="member != null">
+        member = #{member,jdbcType=VARCHAR},
+      </if>
+      <if test="manager != null">
+        manager = #{manager,jdbcType=VARCHAR},
+      </if>
+      <if test="mTelephone != null">
+        m_telephone = #{mTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="profile != null">
+        profile = #{profile,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null">
+        picture = #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where pk_id = #{pkId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="jingsai.demo.team.domain.Team">
+    update team
+    set name = #{name,jdbcType=VARCHAR},
+      teacher = #{teacher,jdbcType=VARCHAR},
+      t_telephone = #{tTelephone,jdbcType=VARCHAR},
+      member = #{member,jdbcType=VARCHAR},
+      manager = #{manager,jdbcType=VARCHAR},
+      m_telephone = #{mTelephone,jdbcType=VARCHAR},
+      profile = #{profile,jdbcType=VARCHAR},
+      picture = #{picture,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=BIT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where pk_id = #{pkId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByTeamId" parameterType="java.lang.Long" resultMap="teamResultMap">
+   SELECT *
+   FROM team t
+   LEFT JOIN team_introduction i
+   ON t.pk_id = i.pk_id
+   where t.pk_id = #{pkId,jdbcType=BIGINT}
+ </select>
+</mapper>
